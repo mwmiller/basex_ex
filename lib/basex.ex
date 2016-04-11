@@ -7,6 +7,8 @@ defmodule BaseX do
   @doc """
   prepare a coding module
 
+  Returns the name of the module.
+
   The resulting module will appear in the BaseX namespace and have `encode`
   and `decode` functions available.
 
@@ -23,17 +25,18 @@ defmodule BaseX do
   Streaming applications should manage their own incomplete message state.
 
   The supplied module name should be both valid (by Elixir rules) and unique.
-  Modules cannot be redefined over another with the same name.
+  Care should be taken when regenereating modules with the same name.
 
   Alphabets may be defined by `{"t","u","p","l","e"}`, `"string"`, `'charlist'` or
   `["l","i","s","t"]` as desired.
   """
-  @spec prepare_module(String.t, binary | list | tuple, pos_integer) :: {:ok, pid}
+  @spec prepare_module(String.t, binary | list | tuple, pos_integer) :: term
   def prepare_module(name,abc,bs) when is_tuple(abc)  do
     full_name = Module.concat("BaseX",name)
-    case Code.ensure_compiled?(full_name) do
-      true -> raise("Already loaded "<>name)
-      false -> generate_module(full_name,abc,bs)
+    generate_module(full_name,abc,bs)
+    case Code.ensure_compiled(full_name) do
+      {:module, module} -> module
+      {:error, why}     -> raise(why)
     end
   end
   def prepare_module(name,[a|bc], bs) when is_bitstring(a),   do: prepare_module(name,[a|bc] |> List.to_tuple, bs)
