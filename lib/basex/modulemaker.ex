@@ -3,6 +3,7 @@ defmodule BaseX.ModuleMaker do
   defmacro gen_module(name,abc,a,b,c,cba,vb,vc,vn) do
    quote bind_quoted: binding()  do
         defmodule name do
+          @moduledoc false
           defp chars_for_bits(b), do: Map.fetch!(unquote(vb), b |> bit_size)
           defp bits_for_chars(c) do
             case Map.fetch(unquote(vc), c |> byte_size) do
