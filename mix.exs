@@ -22,8 +22,8 @@ defmodule BaseX.Mixfile do
   defp deps do
     [
       {:power_assert, "~> 0.0.8", only: :test},
-      {:earmark, ">= 0.0.0", only: :dev},
-      {:ex_doc, "~> 0.11.4", only: :dev},
+      {:earmark, "~> 0.2", only: :dev},
+      {:ex_doc, "~> 0.11", only: :dev},
     ]
   end
 
