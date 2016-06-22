@@ -1,5 +1,5 @@
 defmodule BaseXTest do
-  use PowerAssert
+  use ExUnit.Case
   doctest BaseX
 
   test "encode/decode examples" do

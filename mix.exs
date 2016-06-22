@@ -3,8 +3,8 @@ defmodule BaseX.Mixfile do
 
   def project do
     [app: :basex,
-     version: "0.2.1",
-     elixir: "~> 1.2",
+     version: "0.2.2",
+     elixir: "~> 1.3",
      name: "BaseX",
      source_url: "https://github.com/mwmiller/basex_ex",
      build_embedded: Mix.env == :prod,
@@ -21,9 +21,8 @@ defmodule BaseX.Mixfile do
 
   defp deps do
     [
-      {:power_assert, "~> 0.0.8", only: :test},
       {:earmark, "~> 0.2", only: :dev},
-      {:ex_doc, "~> 0.11", only: :dev},
+      {:ex_doc, "~> 0.12", only: :dev},
     ]
   end
 
