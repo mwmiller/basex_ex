@@ -3,7 +3,7 @@ defmodule BaseX.Mixfile do
 
   def project do
     [app: :basex,
-     version: "0.2.3",
+     version: "0.2.4",
      elixir: "~> 1.3",
      name: "BaseX",
      source_url: "https://github.com/mwmiller/basex_ex",
@@ -22,7 +22,7 @@ defmodule BaseX.Mixfile do
   defp deps do
     [
       {:earmark, "~> 1.0", only: :dev},
-      {:ex_doc, "~> 0.13", only: :dev},
+      {:ex_doc, "~> 0.14", only: :dev},
     ]
   end
 
