@@ -3,15 +3,15 @@ defmodule BaseX.Mixfile do
 
   def project do
     [app: :basex,
-     version: "0.2.4",
-     elixir: "~> 1.3",
+     version: "0.2.5",
+     elixir: "~> 1.4",
      name: "BaseX",
      source_url: "https://github.com/mwmiller/basex_ex",
      build_embedded: Mix.env == :prod,
      start_permanent: Mix.env == :prod,
-     description: description,
-     package: package,
-     deps: deps]
+     description: description(),
+     package: package(),
+     deps: deps()]
   end
 
   def application do
