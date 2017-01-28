@@ -14,18 +14,18 @@ defmodule BaseX.ModuleMaker do
 
           defp decode_error(c), do: raise("Invalid input block: "<>c)
 
-          def  encode(binary), do: encode(binary, <<>>)
-          defp encode(<<>>, acc), do: acc
-          defp encode(<<this::unsigned-big-integer-size(unquote(b)), rest::binary>>, acc), do: encode(rest, acc<>chars_from(this, unquote(c), []))
-          defp encode(final, acc), do: encode(<<>>, acc<>chars_from(:binary.decode_unsigned(final, :big), chars_for_bits(final), []))
+          def  encode(binary), do: encode(binary, [])
+          defp encode(<<>>, acc), do:  acc |> Enum.reverse |> Enum.join
+          defp encode(<<this::unsigned-big-integer-size(unquote(b)), rest::binary>>, acc), do: encode(rest, [chars_from(this, unquote(c), []) | acc])
+          defp encode(final, acc), do: encode(<<>>, [chars_from(:binary.decode_unsigned(final, :big), chars_for_bits(final), []) | acc])
 
           defp chars_from(_num, 0, acc), do: acc |> Enum.join
           defp chars_from(num, count, acc), do: chars_from(num |> div(unquote(a)), count - 1, [elem(unquote(abc), num |> rem(unquote(a))) | acc])
 
-          def  decode(binary), do: decode(binary, <<>>)
-          defp decode(<<>>, acc), do: acc
-          defp decode(<<this::binary-size(unquote(c)), rest::binary>>, acc), do: decode(rest, acc<>gather_chars(this))
-          defp decode(final, acc), do: decode(<<>>, acc<>gather_chars(final))
+          def  decode(binary), do: decode(binary,  [])
+          defp decode(<<>>, acc), do: acc |> Enum.reverse |> Enum.join
+          defp decode(<<this::binary-size(unquote(c)), rest::binary>>, acc), do: decode(rest, [gather_chars(this) | acc])
+          defp decode(final, acc), do: decode(<<>>, [gather_chars(final) | acc])
 
           defp char_val(c), do: Map.fetch!(unquote(cba),c)
           defp gather_chars(all), do: chars_to(all, bits_for_chars(all), 0)

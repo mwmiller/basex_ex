@@ -40,8 +40,10 @@ defmodule BaseX do
     end
   end
   def prepare_module(name,[a|bc], bs) when is_bitstring(a),   do: prepare_module(name,[a|bc] |> List.to_tuple, bs)
-  def prepare_module(name,[a|bc], bs) when is_integer(a),     do: prepare_module(name,[a|bc] |> Enum.map(&:binary.encode_unsigned/1) |> List.to_tuple, bs)
-  def prepare_module(name,abc, bs) when is_binary(abc),       do: prepare_module(name,abc |> String.split("") |> Enum.filter(fn c -> c != "" end), bs)
+  def prepare_module(name,[a|bc], bs) when is_integer(a),     do: prepare_module(name,[a|bc] |> Enum.map(&:binary.encode_unsigned/1), bs)
+  def prepare_module(name,abc, bs)    when is_binary(abc),    do: prepare_module(name,abc
+                                                                                      |> String.split("")
+                                                                                      |> Enum.filter(fn c -> c != "" end), bs)
 
   defp generate_module(name,abc, s) do
       require BaseX.ModuleMaker
