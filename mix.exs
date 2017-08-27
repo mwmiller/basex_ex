@@ -9,6 +9,7 @@ defmodule BaseX.Mixfile do
      source_url: "https://github.com/mwmiller/basex_ex",
      build_embedded: Mix.env == :prod,
      start_permanent: Mix.env == :prod,
+     aliases: aliases(),
      description: description(),
      package: package(),
      deps: deps()]
@@ -18,6 +19,11 @@ defmodule BaseX.Mixfile do
     []
   end
 
+  defp aliases do
+    [
+      test: "test --seed 0",
+    ]
+  end
 
   defp deps do
     [

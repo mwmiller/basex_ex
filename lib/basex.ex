@@ -12,28 +12,32 @@ defmodule BaseX do
   The resulting module will appear in the BaseX namespace and have `encode`
   and `decode` functions available.
 
-  Example:
+  Examples:
 
   ```
-  BaseX.prepare_module("Base2", "01", 4)
+  iex> BaseX.prepare_module("Base2", "01", 4)
+  BaseX.Base2
 
-  BaseX.Base2.encode("Hi!") # "010010000110100100100001"
-  BaseX.Base2.decode("010010000110100100100001") # "Hi!"
+  iex> BaseX.Base2.encode("Hi!")
+  "010010000110100100100001"
+
+  iex> BaseX.Base2.decode("010010000110100100100001")
+  "Hi!"
   ```
 
   These functions are only suitable for complete messages.
   Streaming applications should manage their own incomplete message state.
 
   The supplied module name should be both valid (by Elixir rules) and unique.
-  Care should be taken when regenereating modules with the same name.
+  Care should be taken when regenerating modules with the same name.
 
   Alphabets may be defined by `{"t","u","p","l","e"}`, `"string"`, `'charlist'` or
   `["l","i","s","t"]` as desired.
   """
   @spec prepare_module(String.t, binary | list | tuple, pos_integer) :: term
-  def prepare_module(name,abc,bs) when is_tuple(abc)  do
+  def prepare_module(name,alphabet,block_size) when is_tuple(alphabet)  do
     full_name = Module.concat("BaseX",name)
-    generate_module(full_name,abc,bs)
+    generate_module(full_name,alphabet,block_size)
     case Code.ensure_compiled(full_name) do
       {:module, module} -> module
       {:error, why}     -> raise(why)
