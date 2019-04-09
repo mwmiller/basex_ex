@@ -44,9 +44,9 @@ defmodule BaseX.ModuleMaker do
         defp decode(final, acc), do: decode(<<>>, [gather_chars(final) | acc])
 
         defp char_val(c), do: Map.fetch!(unquote(cba), c)
-        defp gather_chars(all), do: chars_to(all, bits_for_chars(all), 0)
+        defp gather_chars(all), do: chars_to(String.graphemes(all), bits_for_chars(all), 0)
 
-        defp chars_to(<<c::binary-size(1)>>, final_size, acc) do
+        defp chars_to([c], final_size, acc) do
           final_acc = acc + char_val(c)
           max = Map.fetch!(unquote(vn), final_size)
 
@@ -57,7 +57,7 @@ defmodule BaseX.ModuleMaker do
           end
         end
 
-        defp chars_to(<<c::binary-size(1), rest::binary>>, final_size, acc),
+        defp chars_to([c | rest], final_size, acc),
           do: chars_to(rest, final_size, (acc + char_val(c)) * unquote(a))
 
         defp pad_chars(b, final_size) when bit_size(b) == final_size, do: b
