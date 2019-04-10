@@ -35,20 +35,17 @@ defmodule BaseX.ModuleMaker do
               elem(unquote(abc), num |> rem(unquote(a))) | acc
             ])
 
-        def decode(binary), do: decode(binary, [])
-        defp decode(<<>>, acc), do: acc |> Enum.reverse() |> Enum.join()
+        def decode(binary), do: decode(String.graphemes(binary), [])
+        defp decode([], acc), do: acc |> Enum.reverse() |> Enum.join()
 
-        defp decode(<<this::binary-size(unquote(c)), rest::binary>>, acc),
-          do: decode(rest, [gather_chars(this) | acc])
-
-        defp decode(final, acc), do: decode(<<>>, [gather_chars(final) | acc])
+        defp decode(cont, acc) do
+          {this, rest} = Enum.split(cont, unquote(c))
+          decode(rest, [gather_chars(this) | acc])
+        end
 
         defp char_val(c), do: Map.fetch!(unquote(cba), c)
 
-        defp gather_chars(all) do
-          chars = String.graphemes(all)
-          chars_to(chars, bits_for_chars(chars), 0)
-        end
+        defp gather_chars(chars), do: chars_to(chars, bits_for_chars(chars), 0)
 
         defp chars_to([c], final_size, acc) do
           final_acc = acc + char_val(c)

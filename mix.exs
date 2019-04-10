@@ -4,7 +4,7 @@ defmodule BaseX.Mixfile do
   def project do
     [
       app: :basex,
-      version: "1.1.1",
+      version: "1.1.2",
       elixir: "~> 1.7",
       name: "BaseX",
       source_url: "https://github.com/mwmiller/basex_ex",
