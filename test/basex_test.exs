@@ -32,4 +32,11 @@ defmodule BaseXTest do
 
     assert lorem |> BaseX.Base62.encode() |> BaseX.Base62.decode() == lorem, "lorem round-trip"
   end
+
+  test "unicode" do
+    BaseX.prepare_module("UCB", "👎👍", 4)
+
+    assert BaseX.UCB.encode("hi") == "👎👍👍👎👍👎👎👎👎👍👍👎👍👎👎👍"
+    assert BaseX.UCB.decode("👎👍👍👎👍👎👎👎👎👍👍👎👍👎👎👍") == "hi"
+  end
 end

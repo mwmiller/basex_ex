@@ -7,9 +7,9 @@ defmodule BaseX.ModuleMaker do
         defp chars_for_bits(b), do: Map.fetch!(unquote(vb), b |> bit_size)
 
         defp bits_for_chars(c) do
-          case Map.fetch(unquote(vc), c |> byte_size) do
+          case Map.fetch(unquote(vc), c |> Enum.count()) do
             {:ok, val} -> val
-            :error -> decode_error(c)
+            :error -> decode_error(Enum.join(c))
           end
         end
 
@@ -44,7 +44,11 @@ defmodule BaseX.ModuleMaker do
         defp decode(final, acc), do: decode(<<>>, [gather_chars(final) | acc])
 
         defp char_val(c), do: Map.fetch!(unquote(cba), c)
-        defp gather_chars(all), do: chars_to(String.graphemes(all), bits_for_chars(all), 0)
+
+        defp gather_chars(all) do
+          chars = String.graphemes(all)
+          chars_to(chars, bits_for_chars(chars), 0)
+        end
 
         defp chars_to([c], final_size, acc) do
           final_acc = acc + char_val(c)
