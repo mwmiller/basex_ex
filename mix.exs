@@ -4,8 +4,8 @@ defmodule BaseX.Mixfile do
   def project do
     [
       app: :basex,
-      version: "1.2.0",
-      elixir: "~> 1.7",
+      version: "1.3.0",
+      elixir: "~> 1.8",
       name: "BaseX",
       source_url: "https://github.com/mwmiller/basex_ex",
       build_embedded: Mix.env() == :prod,
@@ -29,9 +29,9 @@ defmodule BaseX.Mixfile do
 
   defp deps do
     [
-      {:earmark, "~> 1.1", only: :dev},
-      {:ex_doc, "~> 0.15", only: :dev},
-      {:credo, "~> 1.0", only: [:dev, :test]}
+      {:earmark, "~> 1.3", only: :dev},
+      {:ex_doc, "~> 0.20", only: :dev},
+      {:credo, "~> 1.1", only: [:dev, :test]}
     ]
   end
 
