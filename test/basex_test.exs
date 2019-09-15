@@ -10,6 +10,10 @@ defmodule BaseXTest do
     assert BaseX.Base10.encode(<<0, 255, 0>>) == "00255000"
     assert BaseX.Base10.decode("00255000") == <<0, 255, 0>>
 
+    assert_raise RuntimeError, "Invalid input block: value too large", fn ->
+      BaseX.Base10.decode("70000")
+    end
+
     assert_raise RuntimeError, "Invalid input block: 0000", fn -> BaseX.Base10.decode("0000") end
   end
 

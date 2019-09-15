@@ -65,7 +65,7 @@ defmodule BaseX do
     a = tuple_size(abc)
     b = s * 8
     c = chars_for_bits(b, a)
-    {vb, vc} = valid_sizes(b, a, {%{}, %{}})
+    {vb, vc, vn} = valid_sizes(b, a, {%{}, %{}, %{}})
 
     BaseX.ModuleMaker.gen_module(
       name,
@@ -75,11 +75,14 @@ defmodule BaseX do
       c,
       abc |> index_map_from_tuple |> Macro.escape(),
       Macro.escape(vb),
-      Macro.escape(vc)
+      Macro.escape(vc),
+      Macro.escape(vn),
+      Enum.reduce(Tuple.to_list(abc), true, fn i, acc -> acc and byte_size(i) == 1 end)
     )
   end
 
   defp chars_for_bits(b, a), do: trunc(Float.ceil(b / :math.log2(a)))
+  defp max_num_for_bits(b), do: (:math.pow(2, b) - 1) |> trunc
   defp valid_sizes(0, _a, acc), do: acc
 
   defp valid_sizes(b, a, acc) do
@@ -88,7 +91,8 @@ defmodule BaseX do
     valid_sizes(
       b - 8,
       a,
-      {Map.put(elem(acc, 0), b, c), Map.put(elem(acc, 1), c, b)}
+      {Map.put(elem(acc, 0), b, c), Map.put(elem(acc, 1), c, b),
+       Map.put(elem(acc, 2), b, b |> max_num_for_bits)}
     )
   end
 

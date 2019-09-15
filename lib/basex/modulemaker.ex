@@ -1,6 +1,6 @@
 defmodule BaseX.ModuleMaker do
   @moduledoc false
-  defmacro gen_module(name, abc, a, b, c, cba, vb, vc) do
+  defmacro gen_module(name, abc, a, b, c, cba, vb, vc, vn, check_valid) do
     quote bind_quoted: binding() do
       defmodule name do
         @moduledoc false
@@ -49,7 +49,13 @@ defmodule BaseX.ModuleMaker do
 
         defp chars_to([c], final_size, acc) do
           final_acc = acc + char_val(c)
-          final_acc |> :binary.encode_unsigned(:big) |> pad_chars(final_size)
+          max = Map.fetch!(unquote(vn), final_size)
+
+          if unquote(check_valid) and final_acc > max do
+            decode_error("value too large")
+          else
+            final_acc |> :binary.encode_unsigned(:big) |> pad_chars(final_size)
+          end
         end
 
         defp chars_to([c | rest], final_size, acc),
