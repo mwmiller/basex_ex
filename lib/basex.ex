@@ -77,9 +77,13 @@ defmodule BaseX do
       Macro.escape(vb),
       Macro.escape(vc),
       Macro.escape(vn),
-      Enum.reduce(Tuple.to_list(abc), true, fn i, acc -> acc and byte_size(i) == 1 end)
+      Macro.escape(single_octets?(abc))
     )
   end
+
+  defp single_octets?(chars), do: single_octets(Tuple.to_list(chars), true)
+  defp single_octets([], acc), do: acc
+  defp single_octets([h | t], acc), do: single_octets(t, acc and bit_size(h) <= 8)
 
   defp chars_for_bits(b, a), do: trunc(Float.ceil(b / :math.log2(a)))
   defp max_num_for_bits(b), do: (:math.pow(2, b) - 1) |> trunc

@@ -49,7 +49,7 @@ defmodule BaseX.ModuleMaker do
 
         defp chars_to([c], final_size, acc) do
           final_acc = acc + char_val(c)
-          max = Map.fetch!(unquote(vn), final_size)
+          {:ok, max} = Map.fetch(unquote(vn), final_size)
 
           if unquote(check_valid) and final_acc > max do
             decode_error("value too large")
