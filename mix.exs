@@ -29,7 +29,6 @@ defmodule BaseX.Mixfile do
 
   defp deps do
     [
-      {:earmark, "~> 1.4", only: :dev},
       {:ex_doc, "~> 0.23", only: :dev}
     ]
   end
