@@ -2,8 +2,15 @@ defmodule BaseXTest do
   use ExUnit.Case
   doctest BaseX
 
+  # Supress undefined module warnings.  We know we're
+  # going to make them ourselves later.
+  @compile {:no_warn_undefined, BaseX.Base2}
+  @compile {:no_warn_undefined, BaseX.Base10}
+  @compile {:no_warn_undefined, BaseX.Base62}
+  @compile {:no_warn_undefined, BaseX.UCB}
+
   test "encode/decode examples" do
-    BaseX.prepare_module("Base10", "0123456789", 2)
+    assert BaseX.prepare_module("Base10", "0123456789", 2) == BaseX.Base10
 
     assert BaseX.Base10.encode(<<0, 255>>) == "00255"
     assert BaseX.Base10.decode("00255") == <<0, 255>>
@@ -18,11 +25,11 @@ defmodule BaseXTest do
   end
 
   test "base 62" do
-    BaseX.prepare_module(
-      "Base62",
-      "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz",
-      32
-    )
+    assert BaseX.prepare_module(
+             "Base62",
+             "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz",
+             32
+           ) == BaseX.Base62
 
     assert BaseX.Base62.encode("some random text") == "3Vp2TszAKnurweInsegL5w"
     assert BaseX.Base62.decode("3Vp2TszAKnurweInsegL5w") == "some random text"
@@ -34,7 +41,7 @@ defmodule BaseXTest do
   end
 
   test "unicode" do
-    BaseX.prepare_module("UCB", "👎👍", 2)
+    assert BaseX.prepare_module("UCB", "👎👍", 2) == BaseX.UCB
 
     assert BaseX.UCB.encode("hi") == "👎👍👍👎👍👎👎👎👎👍👍👎👍👎👎👍"
     assert BaseX.UCB.decode("👎👍👍👎👍👎👎👎👎👍👍👎👍👎👎👍") == "hi"
